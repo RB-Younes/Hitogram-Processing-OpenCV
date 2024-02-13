@@ -184,16 +184,12 @@ Mat quantize(Mat image, int numberOfLevels)
         for (int i = 0; i < cols; i++)
         {
             auto val = res.at<float>(Point(i, j));
-            for (int i = 1; i <= numberOfLevels; i++)
+            for (int k = 1; k <= numberOfLevels; k++)
             {
-                float val = res.at<>
-                if () {
-
+                if ((float) (k - 1)/ (float) numberOfLevels < val &&  val <= (float) k/ (float) numberOfLevels) {
+                    res.at<float>(Point(i, j)) = (float) (k-1) / (float) numberOfLevels;
                 }
-
             }
-
-            
         }
     }
     
@@ -238,7 +234,6 @@ Mat normalize(Mat image, float minValue, float maxValue)
             }
         }
     }
-    cout << max, min;
 
     for (int j = 0; j < rows; j++)
     {
