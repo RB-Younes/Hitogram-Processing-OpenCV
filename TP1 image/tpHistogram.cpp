@@ -54,7 +54,39 @@ Mat threshold(Mat image, float lowT, float highT)
     /********************************************
                 YOUR CODE HERE
     *********************************************/
-    
+    int rows = res.rows;
+    int cols = res.cols;
+
+
+    /* OR
+     cv::Size s = res.size();
+    int rows = s.height;
+    int cols = s.width;
+
+    */
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+
+            auto& pixel_RGB = image.at<Vec3b>(Point(j, i));
+            if (pixel_RGB[0] <= lowT) {
+                pixel_RGB[0] = 0;
+                pixel_RGB[1] = 0;
+                pixel_RGB[2] = 0;
+            }
+            else {
+                if (pixel_RGB[0] > highT) {
+                    pixel_RGB[0] = 255;
+                    pixel_RGB[1] = 255;
+                    pixel_RGB[2] = 255;
+                }
+            }
+            res.at<Vec3b>(Point(j, i)) = pixel_RGB;
+                
+        }
+            
+    }
     /********************************************
                 END OF YOUR CODE
     *********************************************/

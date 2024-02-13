@@ -31,5 +31,11 @@
     <Image Include="uni.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="blobs.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="Viego_0.jpg">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

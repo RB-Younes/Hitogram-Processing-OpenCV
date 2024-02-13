@@ -134,7 +134,9 @@
     <ClInclude Include="tpHistogram.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="blobs.png" />
     <Image Include="uni.png" />
+    <Image Include="Viego_0.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
