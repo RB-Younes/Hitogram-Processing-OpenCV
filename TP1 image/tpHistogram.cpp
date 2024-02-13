@@ -25,7 +25,35 @@ Mat inverse(Mat image)
     {
         for (int j = 0; j < cols; j++)
         {
-            auto& pixel_RGB =  image.at<Vec3b>(Point(j, i));
+
+            res.at<uchar>(Point(j, i)) = 255 - res.at<uchar>(Point(j, i));
+
+        }
+    }
+    /********************************************
+                END OF YOUR CODE
+    *********************************************/
+    return res;
+}
+
+
+Mat inverse_RGB(Mat image)
+{
+    // clone original image
+    Mat res = image.clone();
+    /********************************************
+              YOUR CODE HERE
+  *********************************************/
+    cv::Size s = res.size();
+    int rows = s.height;
+    int cols = s.width;
+
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            auto pixel_RGB = image.at<Vec3b>(Point(j, i));
             pixel_RGB[0] = 255 - pixel_RGB[0];
             pixel_RGB[1] = 255 - pixel_RGB[1];
             pixel_RGB[2] = 255 - pixel_RGB[2];
@@ -57,19 +85,44 @@ Mat threshold(Mat image, float lowT, float highT)
     int rows = res.rows;
     int cols = res.cols;
 
-
-    /* OR
-     cv::Size s = res.size();
-    int rows = s.height;
-    int cols = s.width;
-
-    */
     for (int i = 0; i < rows; i++)
     {
         for (int j = 0; j < cols; j++)
         {
 
-            auto& pixel_RGB = image.at<Vec3b>(Point(j, i));
+            if (image.at<uchar>(Point(j, i)) <= lowT) {
+                res.at<uchar>(Point(j, i)) = 0;
+            }
+            else {
+                if (image.at<uchar>(Point(j, i)) > highT) {
+                    res.at<uchar>(Point(j, i)) = 255;
+                }
+            }
+
+        }
+    }
+    /********************************************
+                END OF YOUR CODE
+    *********************************************/
+    return res;
+}
+
+Mat threshold_RGB(Mat image, float lowT, float highT)
+{
+    Mat res = image.clone();
+    assert(lowT <= highT);
+    /********************************************
+                YOUR CODE HERE
+    *********************************************/
+    int rows = res.rows;
+    int cols = res.cols;
+
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+
+            auto& pixel_RGB = res.at<Vec3b>(Point(j, i));
             if (pixel_RGB[0] <= lowT) {
                 pixel_RGB[0] = 0;
                 pixel_RGB[1] = 0;
@@ -82,16 +135,18 @@ Mat threshold(Mat image, float lowT, float highT)
                     pixel_RGB[2] = 255;
                 }
             }
+            /* NO NEED BCZ  pixel_RGB is a ref to my image and every modification on  pixel_RGB will modify my image
             res.at<Vec3b>(Point(j, i)) = pixel_RGB;
-                
+            */
+
         }
-            
     }
     /********************************************
                 END OF YOUR CODE
     *********************************************/
     return res;
 }
+
 
 /**
     Quantize the input float image in [0,1] in numberOfLevels different gray levels.
@@ -117,6 +172,30 @@ Mat quantize(Mat image, int numberOfLevels)
     /********************************************
                 YOUR CODE HERE
     *********************************************/
+
+    /*Normlize the input image*/
+    res = normalize(res);
+    int rows = res.rows;
+    int cols = res.cols;
+
+
+    for (int j = 0; j < rows; j++)
+    {
+        for (int i = 0; i < cols; i++)
+        {
+            auto val = res.at<float>(Point(i, j));
+            for (int i = 1; i <= numberOfLevels; i++)
+            {
+                float val = res.at<>
+                if () {
+
+                }
+
+            }
+
+            
+        }
+    }
     
     /********************************************
                 END OF YOUR CODE
@@ -131,10 +210,43 @@ Mat quantize(Mat image, int numberOfLevels)
 Mat normalize(Mat image, float minValue, float maxValue)
 {
     Mat res = image.clone();
+    image.convertTo(res, CV_32F);
+    
     assert(minValue <= maxValue);
     /********************************************
                 YOUR CODE HERE
     *********************************************/
+
+    int rows = res.rows;
+    int cols = res.cols;
+    
+    float max = 255;
+    float min = 0;
+    for (int j = 0; j < rows; j++)
+    {
+        for (int i = 0; i < cols; i++)
+        {
+            auto val = res.at<float>(Point(i, j));
+
+            if (val < min)
+            {
+                min = val;
+            }
+            if (val > max)
+            {
+                max = val;
+            }
+        }
+    }
+    cout << max, min;
+
+    for (int j = 0; j < rows; j++)
+    {
+        for (int i = 0; i < cols; i++)
+        {
+            res.at<float>(Point(i, j)) = ((static_cast<int>(res.at<float>(Point(i, j))) - min) / (max - min))* (maxValue - minValue) + minValue;
+        }
+    }
     
     /********************************************
                 END OF YOUR CODE

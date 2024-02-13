@@ -6,9 +6,14 @@
 
 cv::Mat inverse(cv::Mat image);
 
+cv::Mat inverse_RGB(cv::Mat image);
+
 cv::Mat threshold(cv::Mat image, float lowT, float highT);
 
+cv::Mat threshold_RGB(cv::Mat image, float lowT, float highT);
+
 cv::Mat normalize(cv::Mat image,  float minValue=0, float maxValue=1);
+
 
 cv::Mat quantize(cv::Mat image, int numberOfLevels);
 
