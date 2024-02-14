@@ -30,6 +30,7 @@ Mat inverse(Mat image)
 
         }
     }
+
     /********************************************
                 END OF YOUR CODE
     *********************************************/
@@ -263,7 +264,50 @@ Mat equalize(Mat image)
     /********************************************
                 YOUR CODE HERE
     *********************************************/
-    
+
+
+    int rows = res.rows;
+    int cols = res.cols;
+
+
+    // Calculate histogram
+    vector<int> histogram(256, 0);
+    for (int j = 0; j < rows; j++)
+    {
+        for (int i = 0; i < cols; i++)
+        {
+            auto val = static_cast<int>(res.at<uchar>(Point(i, j)));
+            histogram[val]++;
+        }
+    }
+
+    // Calculate cumulative distribution function (CDF)
+    vector<float> cdf(256, 0);
+    cdf[0] = static_cast<float>(histogram[0]);
+    for (int i = 1; i < 256; ++i)
+    {
+        cdf[i] = cdf[i - 1] + static_cast<float>(histogram[i]);
+    }
+
+    // Normalize CDF
+    for (int i = 0; i < 256; ++i)
+    {
+        cdf[i] /= static_cast<float>(rows * cols);
+    }
+
+
+    for (int j = 0; j < rows; j++)
+    {
+        for (int i = 0; i < cols; i++)
+        {
+            auto val = static_cast<int>(res.at<uchar>(Point(i, j)));
+            auto p_val = (cdf[val] - cdf[0]) / (1 - cdf[0]) * 255.0f;
+            res.at<uchar>(j, i) = static_cast<uchar>(p_val);
+        }
+    }
+
+
+
     /********************************************
                 END OF YOUR CODE
     *********************************************/
@@ -281,6 +325,50 @@ Mat thresholdOtsu(Mat image)
     /********************************************
                 YOUR CODE HERE
     *********************************************/
+
+    int rows = res.rows;
+    int cols = res.cols;
+
+
+    // Calculate histogram
+    vector<int> histogram(256, 0);
+    for (int j = 0; j < rows; j++)
+    {
+        for (int i = 0; i < cols; i++)
+        {
+            auto val = static_cast<int>(res.at<uchar>(Point(i, j)));
+            histogram[val]++;
+        }
+    }
+
+
+    // Calculate cumulative distribution function (CDF)
+    vector<float> cdf(256, 0);
+    cdf[0] = static_cast<float>(histogram[0]);
+    for (int i = 1; i < 256; ++i)
+    {
+        cdf[i] = cdf[i - 1] + static_cast<float>(histogram[i]);
+    }
+
+    // Normalize CDF
+    for (int i = 0; i < 256; ++i)
+    {
+        cdf[i] /= static_cast<float>(rows * cols);
+    }
+
+    // Compute global mean
+    double globalMean = 0.0;
+    for (int i = 0; i < 256; ++i) {
+        globalMean += i * cdf[i];
+    }
+    // Compute cumulative sums
+    vector<double> cumulativeSum(256, 0.0);
+    cumulativeSum[0] = cdf[0];
+    for (int i = 1; i < 256; ++i) {
+        cumulativeSum[i] = cumulativeSum[i - 1] + cdf[i];
+    }
+
+
     
     /********************************************
                 END OF YOUR CODE

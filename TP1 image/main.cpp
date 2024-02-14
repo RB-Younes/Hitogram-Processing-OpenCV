@@ -9,7 +9,7 @@ using namespace cv;
 int main()
 {
     std::string image_path = samples::findFile("Viego_0.jpg");
-    Mat img = quantize(imread(image_path, IMREAD_GRAYSCALE),2);
+    Mat img = inverse(imread(image_path, IMREAD_GRAYSCALE));
     if (img.empty())
     {
         std::cout << "Could not read the image: " << image_path << std::endl;
